@@ -1,0 +1,30 @@
+<div class="sale-container">
+  <p-card header="Venta">
+    <p-inputGroup class="sale-input">
+      <p-inputGroupAddon>
+        <i class="pi pi-pencil"></i>
+      </p-inputGroupAddon>
+      <input pInputText id="description-input" placeholder="Descripcion" [(ngModel)]="description"/>
+    </p-inputGroup>
+    <p-inputGroup class="sale-input">
+      <p-inputGroupAddon>
+        <i class="pi pi-dollar"></i>
+      </p-inputGroupAddon>
+      <p-inputNumber id="mount-input" placeholder="Monto" [(ngModel)]="mount"/>
+    </p-inputGroup>
+
+    <button pButton pRipple label="Completado" class="p-button-success submit-sale" (click)="submit()"></button>
+  </p-card>
+</div>
+
+<p-dialog header="Ingrese monto recibido:" [(visible)]="showConfirmation" [modal]="true" [style]="{width: '50vw'}"
+          class="sale-container">
+  <p-inputGroup class="sale-input">
+    <p-inputGroupAddon>
+      <i class="pi pi-dollar"></i>
+    </p-inputGroupAddon>
+    <p-inputNumber #changeInput placeholder="Monto" [(ngModel)]="mount"/>
+  </p-inputGroup>
+  <button pButton pRipple pAutoFocus [autofocus]="true" label="Completado" class="p-button-success submit-sale"
+          (click)="completeSale()"></button>
+</p-dialog>

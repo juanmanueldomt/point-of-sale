@@ -1,0 +1,13 @@
+.sale-container {
+  width: 80%;
+  text-align: center;
+  padding-left: 20%;
+  padding-top: 15%;
+}
+.sale-input {
+  margin-top: 30px
+}
+
+.submit-sale {
+  margin-top: 30px;
+}
