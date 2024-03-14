@@ -1,30 +1,69 @@
 <div class="sale-container">
+  <form [formGroup]="saleForm" (ngSubmit)="submit()">
+    <p-card header="Venta">
+      <p-inputGroup class="sale-input">
+        <p-inputGroupAddon>
+          <i class="pi pi-pencil"></i>
+        </p-inputGroupAddon>
+        <input pInputText id="description-input" placeholder="Descripcion" formControlName="description"/>
+      </p-inputGroup>
+      <small class="p-error block" *ngIf="
+            saleForm.get('description')?.invalid &&
+            saleForm.get('description')?.dirty
+          ">Description is required</small>
+      <p-inputGroup class="sale-input">
+        <p-inputGroupAddon>
+          <i class="pi pi-dollar"></i>
+        </p-inputGroupAddon>
+        <p-inputNumber id="mount-input" placeholder="Monto" formControlName="mount"/>
+      </p-inputGroup>
+      <small class="p-error block" *ngIf="
+            saleForm.get('mount')?.invalid &&
+            saleForm.get('mount')?.dirty
+          ">Mount is required</small>
+      <br>
+      <button type="submit" pButton pRipple label="Completado" class="p-button-success submit-sale"></button>
+    </p-card>
+  </form>
+</div>
+<div class="sale-summary">
   <p-card header="Venta">
-    <p-inputGroup class="sale-input">
-      <p-inputGroupAddon>
-        <i class="pi pi-pencil"></i>
-      </p-inputGroupAddon>
-      <input pInputText id="description-input" placeholder="Descripcion" [(ngModel)]="description"/>
-    </p-inputGroup>
-    <p-inputGroup class="sale-input">
-      <p-inputGroupAddon>
-        <i class="pi pi-dollar"></i>
-      </p-inputGroupAddon>
-      <p-inputNumber id="mount-input" placeholder="Monto" [(ngModel)]="mount"/>
-    </p-inputGroup>
-
-    <button pButton pRipple label="Completado" class="p-button-success submit-sale" (click)="submit()"></button>
+    <p-table [value]="lastSales" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Descripcion</th>
+          <th>Monto</th>
+          <th>Monto recibido</th>
+          <th>Cambio</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-sale>
+        <tr>
+          <td>{{ sale.description }}</td>
+          <td>{{ sale.mount }}</td>
+          <td>{{ sale.ingress }}</td>
+          <td>{{ sale.change }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
   </p-card>
+
 </div>
 
 <p-dialog header="Ingrese monto recibido:" [(visible)]="showConfirmation" [modal]="true" [style]="{width: '50vw'}"
           class="sale-container">
-  <p-inputGroup class="sale-input">
-    <p-inputGroupAddon>
-      <i class="pi pi-dollar"></i>
-    </p-inputGroupAddon>
-    <p-inputNumber #changeInput placeholder="Monto" [(ngModel)]="mount"/>
-  </p-inputGroup>
-  <button pButton pRipple pAutoFocus [autofocus]="true" label="Completado" class="p-button-success submit-sale"
-          (click)="completeSale()"></button>
+  <form [formGroup]="confirmForm" (ngSubmit)="completeSale()">
+
+    <p-inputGroup class="sale-input">
+      <p-inputGroupAddon>
+        <i class="pi pi-dollar"></i>
+      </p-inputGroupAddon>
+      <p-inputNumber #changeInput placeholder="Monto" formControlName="ingress"/>
+    </p-inputGroup>
+    <h2>
+      Cambio: {{ lodash.toNumber(confirmForm.get('ingress')?.value) - lodash.toNumber(saleForm.get('mount')?.value) }}</h2>
+    <br>
+    <button pButton pRipple pAutoFocus [autofocus]="true" label="Completado"
+            class="p-button-success submit-sale"></button>
+  </form>
 </p-dialog>

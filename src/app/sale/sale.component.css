@@ -2,7 +2,13 @@
   width: 80%;
   text-align: center;
   padding-left: 20%;
-  padding-top: 15%;
+  padding-top: 5%;
+}
+.sale-summary{
+  width: 80%;
+  text-align: center;
+  padding-left: 20%;
+  padding-top: 5%;
 }
 .sale-input {
   margin-top: 30px
