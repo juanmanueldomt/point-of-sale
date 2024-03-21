@@ -4,4 +4,5 @@ export class Sale {
   public mount!: number;
   public ingress!: number;
   public change!: number;
+  public saleTime!: Date;
 }

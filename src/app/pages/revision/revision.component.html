@@ -1,0 +1,29 @@
+<div class="revision">
+  <p-dropdown [options]="revisions" [(ngModel)]="selectedRevision" optionLabel="name" [showClear]="true" placeholder="Seleccione un corte de Caja"></p-dropdown>
+
+</div>
+
+<div class="sale-summary">
+  <p-card header="Venta">
+    <p-table [value]="sales" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Descripcion</th>
+          <th>Monto</th>
+          <th>Monto recibido</th>
+          <th>Cambio</th>
+          <th>Hora de la venta</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-sale>
+        <tr>
+          <td>{{ sale.description }}</td>
+          <td>{{ sale.mount }}</td>
+          <td>{{ sale.ingress }}</td>
+          <td>{{ sale.change }}</td>
+          <td>{{ sale.saleTime }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>

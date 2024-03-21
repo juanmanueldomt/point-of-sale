@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {InputTextModule} from "primeng/inputtext";
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ButtonModule} from "primeng/button";
@@ -11,11 +11,14 @@ import {DialogModule} from "primeng/dialog";
 import {AutoFocusModule} from "primeng/autofocus";
 import {TableModule} from "primeng/table";
 
-import {SaleService} from "../services/SaleService";
-import {Sale} from "../models/Sale";
+import {SaleService} from "../../services/SaleService";
+import {Sale} from "../../models/Sale";
 import _ from 'lodash';
 import {NgIf} from "@angular/common";
+import {interval, takeWhile} from "rxjs";
 
+
+const REFRESH_INTERVAL = 60000;
 
 @Component({
   selector: 'app-sale',
@@ -39,7 +42,7 @@ import {NgIf} from "@angular/common";
   styleUrl: './sale.component.css',
   providers: [SaleService]
 })
-export class SaleComponent {
+export class SaleComponent implements OnInit, OnDestroy {
 
   @ViewChild('changeInput') changeInput!: ElementRef<InputNumber>;
 
@@ -47,6 +50,7 @@ export class SaleComponent {
 
   public lastSales: Sale[] = [];
   public showConfirmation: boolean = false;
+  private stop: boolean = false;
 
 
   saleForm = this.formBuilder.group({
@@ -62,6 +66,30 @@ export class SaleComponent {
               private formBuilder: FormBuilder) {
   }
 
+  public ngOnInit(): void {
+    this.refreshRecentSaleData();
+    interval(REFRESH_INTERVAL)
+      .pipe(takeWhile(() => !this.stop))
+      .subscribe(
+        () => this.refreshRecentSaleData()
+      )
+  }
+
+  private refreshRecentSaleData(): void {
+    this.saleService.getRecentSales().subscribe(
+      {
+        next: (sales) => {
+          this.lastSales = sales
+        },
+        error: () => {
+          this.lastSales = []
+        }
+      })
+  }
+
+  public ngOnDestroy(): void {
+    this.stop = true
+  }
 
   public submit(): void {
     if (this.saleForm.valid) {
@@ -82,10 +110,17 @@ export class SaleComponent {
 
     const sale: Sale = this.createModel();
 
-    this.saleService.registerSale(sale);
-    this.lastSales.push(sale)
-    this.clearFields();
-    this.showConfirmation = false;
+    this.saleService.registerSale(sale).subscribe({
+      next: () => {
+        this.lastSales.push(sale)
+        this.clearFields();
+        this.showConfirmation = false;
+      },
+      error: () => {
+        console.log("Error creating messages")
+      }
+    });
+
   }
 
   private clearFields(): void {
