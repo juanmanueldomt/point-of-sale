@@ -62,8 +62,10 @@ export class SaleComponent implements OnInit, OnDestroy {
     ingress: ['', Validators.required]
   })
 
-  constructor(private saleService: SaleService,
-              private formBuilder: FormBuilder) {
+  constructor(
+    private saleService: SaleService,
+    private formBuilder: FormBuilder
+  ) {
   }
 
   public ngOnInit(): void {

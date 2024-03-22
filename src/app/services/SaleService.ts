@@ -17,6 +17,13 @@ export class SaleService {
 
   public getRecentSales(): Observable<Sale[]> {
     return this.http.get(`${environment.serverUrl}/sale/recent-sale`) as Observable<Sale[]>
+  }
 
+  public getSalesFromRevision(id: number): Observable<Sale[]> {
+    return this.http.get(`${environment.serverUrl}/sale/by-revision`, {params: {revisionId: id}}) as Observable<Sale[]>
+  }
+
+  public searchSales(searchData: string): Observable<Sale[]> {
+    return this.http.get(`${environment.serverUrl}/sale/search`, {params: {data: searchData}}) as Observable<Sale[]>
   }
 }

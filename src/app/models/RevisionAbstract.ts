@@ -9,4 +9,6 @@ export abstract class RevisionAbstract {
   public hundreds!: number;
   public twoHundreds!: number;
   public fiveHundreds!: number;
+
+  public total?: number;
 }

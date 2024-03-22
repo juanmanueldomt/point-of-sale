@@ -1,29 +1,164 @@
-<div class="revision">
-  <p-dropdown [options]="revisions" [(ngModel)]="selectedRevision" optionLabel="name" [showClear]="true" placeholder="Seleccione un corte de Caja"></p-dropdown>
+<p-splitter styleClass="mb-5">
+  <ng-template pTemplate>
+    <div class="left-revision">
+      <h2>Corte de caja</h2>
+      <div class="input-revision">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="pi pi-inbox"></i></span>
+          <p-dropdown [options]="revisions" [(ngModel)]="selectedRevision" optionLabel="revisionTime"
+                      [showClear]="true" placeholder="Seleccione un corte de Caja" (onChange)="selectRevision()">
+            <ng-template pTemplate="selectedItem">
+              <div>{{ selectedRevision.revisionTime | date: 'medium' }}</div>
+            </ng-template>
+            <ng-template let-revision pTemplate="item">
+              <div class="flex align-items-center gap-2">
+                <div>{{ revision.revisionTime | date: 'medium' }}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </div>
+      <div class="from-revision" mb-5>
+        <p-fieldset legend="Informacion del corte">
+          <div class="from-revision-row">
+            <div class="from-revision-col">
+              <p><b>Suelto:</b> {{ selectedRevision.singleCoins }}</p>
+              <p><b>Monedas:</b> {{ selectedRevision.tenCoins }}</p>
+              <p><b>20's:</b> {{ selectedRevision.twenties }}</p>
+              <p><b>50's:</b> {{ selectedRevision.fifties }}</p>
+            </div>
+            <div class="from-revision-col">
+              <p><b>100's:</b> {{ selectedRevision.hundreds }}</p>
+              <p><b>200's:</b> {{ selectedRevision.twoHundreds }}</p>
+              <p><b>500's:</b> {{ selectedRevision.fiveHundreds }}</p>
+              <h3>Total: {{ this.selectedRevision.total }}</h3>
+            </div>
+          </div>
+        </p-fieldset>
+      </div>
 
-</div>
+      <div class="to-revision" mb-5>
+        <p-fieldset legend="Realizar corte">
+          <div class="from-revision-row">
+            <form [formGroup]="revisionForm" (ngSubmit)="doRevision()">
+              <div class="from-revision-col">
+                <p-inputGroup class="sale-input">
+                  <p-inputGroupAddon>
+                    <div class="crop">
+                      <img src="/assets/coins.svg" height="30px"/>
+                    </div>
+                    Suelto:
+                  </p-inputGroupAddon>
+                  <input pInputText id="singleCoins-input" placeholder="Suelto" formControlName="singleCoins"/>
+                </p-inputGroup>
+                <p-inputGroup class="sale-input">
+                  <p-inputGroupAddon>
+                    <div class="crop">
+                      <img src="/assets/coins.svg" height="30px"/>
+                    </div>
+                    Monedas:
+                  </p-inputGroupAddon>
+                  <p-inputNumber id="tenCoins-input" placeholder="Monedas" formControlName="tenCoins"/>
+                </p-inputGroup>
+                <p-inputGroup class="sale-input">
+                  <p-inputGroupAddon>
+                    <div class="crop">
+                      <img src="/assets/bill.svg" height="30px"/>
+                    </div>
+                    20's
+                  </p-inputGroupAddon>
+                  <p-inputNumber id="twenties-input" placeholder="20's" formControlName="twenties"/>
+                </p-inputGroup>
+                <p-inputGroup class="sale-input">
+                  <p-inputGroupAddon>
+                    <div class="crop">
+                      <img src="/assets/bill.svg" height="30px"/>
+                    </div>
+                    50's
+                  </p-inputGroupAddon>
+                  <input pInputText id="fifties-input" placeholder="50's" formControlName="fifties"/>
+                </p-inputGroup>
 
-<div class="sale-summary">
-  <p-card header="Venta">
-    <p-table [value]="sales" [tableStyle]="{ 'min-width': '50rem' }">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Descripcion</th>
-          <th>Monto</th>
-          <th>Monto recibido</th>
-          <th>Cambio</th>
-          <th>Hora de la venta</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-sale>
-        <tr>
-          <td>{{ sale.description }}</td>
-          <td>{{ sale.mount }}</td>
-          <td>{{ sale.ingress }}</td>
-          <td>{{ sale.change }}</td>
-          <td>{{ sale.saleTime }}</td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </p-card>
-</div>
+                <h1 *ngIf="total && this.revision && this.selectedRevision" [ngClass]="{'sale-negative': total < 0}">
+                  Resultado: {{
+                    lodash.toNumber(this.selectedRevision.total) +
+                    lodash.toNumber(this.revision.total) +
+                    lodash.toNumber(this.total)
+                  }}
+                </h1>
+              </div>
+              <div class="from-revision-col">
+                <p-inputGroup class="sale-input">
+                  <p-inputGroupAddon>
+                    <div class="crop">
+                      <img src="/assets/bill.svg" height="30px"/>
+                    </div>
+                    100's
+                  </p-inputGroupAddon>
+                  <input pInputText id="hundreds-input" placeholder="100's" formControlName="hundreds"/>
+                </p-inputGroup>
+                <p-inputGroup class="sale-input">
+                  <p-inputGroupAddon>
+                    <div class="crop">
+                      <img src="/assets/bill.svg" height="30px"/>
+                    </div>
+                    200's
+                  </p-inputGroupAddon>
+                  <input pInputText id="twoHundreds-input" placeholder="200's" formControlName="twoHundreds"/>
+                </p-inputGroup>
+                <p-inputGroup class="sale-input">
+                  <p-inputGroupAddon>
+                    <div class="crop">
+                      <img src="/assets/bill.svg" height="30px"/>
+                    </div>
+                    500's
+                  </p-inputGroupAddon>
+                  <input pInputText id="fiveHundreds-input" placeholder="500's" formControlName="fiveHundreds"/>
+                </p-inputGroup>
+                <h2>Suma total: {{ this.revision.total }}</h2>
+                <button type="submit" pButton pRipple label="Completado"
+                        class="p-button-success submit-revision"></button>
+              </div>
+            </form>
+          </div>
+        </p-fieldset>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate>
+    <div class="right-revision">
+      <p-scrollPanel [style]="{height: '84vh'}">
+        <div class="revision-sales">
+          <p-table [value]="sales" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Descripcion</th>
+                <th>Monto</th>
+                <th>Monto recibido</th>
+                <th>Cambio</th>
+                <th>Hora de la venta</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-sale>
+              <tr [ngClass]="{'sale-negative': sale.mount < 0}">
+                <td>{{ sale.description }}</td>
+                <td>{{ sale.mount }}</td>
+                <td>{{ sale.ingress }}</td>
+                <td>{{ sale.change }}</td>
+                <td>{{ sale.saleTime | date:'medium' }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </p-scrollPanel>
+      <p class="sale-totals">
+        <b class="sale-total">Venta:</b> {{ saleTotal }}
+        <b class="sale-total">Gastos:</b> {{ spentTotal }}
+        <b class="sale-total">Total:</b>
+        <a [ngClass]="{'sale-negative': total < 0}">{{ total }}</a>
+      </p>
+    </div>
+  </ng-template>
+</p-splitter>
+
+
