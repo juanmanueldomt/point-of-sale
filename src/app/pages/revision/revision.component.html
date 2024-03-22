@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <p-splitter styleClass="mb-5">
   <ng-template pTemplate>
     <div class="left-revision">
@@ -66,7 +67,7 @@
                   <input pInputText id="fifties-input" placeholder="50's" formControlName="fifties"/>
                 </p-inputGroup>
 
-                <h1 *ngIf="total && this.revision && this.selectedRevision"
+                <h1 *ngIf="this.revision && this.selectedRevision"
                     [ngClass]="{'sale-negative': (
                     lodash.toNumber(this.revision.total) - (
                     lodash.toNumber(this.selectedRevision.total) +

@@ -1,0 +1,98 @@
+<p-splitter styleClass="mb-5">
+  <ng-template pTemplate>
+    <div class="left-revision">
+      <h2>Ver cortes de caja</h2>
+      <div class="input-revision">
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon"><i class="pi pi-inbox"></i></span>
+          <p-dropdown [options]="revisions" [(ngModel)]="selectedRevision" optionLabel="revisionTime"
+                      [showClear]="true" placeholder="Seleccione un corte de Caja" (onChange)="selectRevision()">
+            <ng-template pTemplate="selectedItem">
+              <div>{{ selectedRevision.revisionTime | date: 'medium' }}</div>
+            </ng-template>
+            <ng-template let-revision pTemplate="item">
+              <div class="flex align-items-center gap-2">
+                <div>{{ revision.revisionTime | date: 'medium' }}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </div>
+      <div class="from-revision" mb-5>
+        <p-fieldset legend="Informacion del corte">
+          <div class="from-revision-row">
+            <div class="from-revision-col">
+              <p><b>Suelto:</b> {{ selectedRevision.singleCoins }}</p>
+              <p><b>Monedas:</b> {{ selectedRevision.tenCoins }}</p>
+              <p><b>20's:</b> {{ selectedRevision.twenties }}</p>
+              <p><b>50's:</b> {{ selectedRevision.fifties }}</p>
+            </div>
+            <div class="from-revision-col">
+              <p><b>100's:</b> {{ selectedRevision.hundreds }}</p>
+              <p><b>200's:</b> {{ selectedRevision.twoHundreds }}</p>
+              <p><b>500's:</b> {{ selectedRevision.fiveHundreds }}</p>
+              <h3>Total: {{ this.selectedRevision.total }}</h3>
+            </div>
+          </div>
+        </p-fieldset>
+      </div>
+
+      <div class="to-revision" mb-5>
+        <p-fieldset legend="Realizar corte">
+          <div class="from-revision-row">
+            <div class="from-revision-col">
+              <p><b>Suelto:</b> {{ toRevision.singleCoins }}</p>
+              <p><b>Monedas:</b> {{ toRevision.tenCoins }}</p>
+              <p><b>20's:</b> {{ toRevision.twenties }}</p>
+              <p><b>50's:</b> {{ toRevision.fifties }}</p>
+              <h1 [ngClass]="{'sale-negative': this.result < 0}">
+                <b>Resultado</b> {{ this.result }}</h1>
+            </div>
+            <div class="from-revision-col">
+              <p><b>100's:</b> {{ toRevision.hundreds }}</p>
+              <p><b>200's:</b> {{ toRevision.twoHundreds }}</p>
+              <p><b>500's:</b> {{ toRevision.fiveHundreds }}</p>
+              <h3>Total: {{ this.toRevision.total }}</h3>
+            </div>
+          </div>
+        </p-fieldset>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate>
+    <div class="right-revision">
+      <p-scrollPanel [style]="{height: '84vh'}">
+        <div class="revision-sales">
+          <p-table [value]="sales" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Descripcion</th>
+                <th>Monto</th>
+                <th>Monto recibido</th>
+                <th>Cambio</th>
+                <th>Hora de la venta</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-sale>
+              <tr [ngClass]="{'sale-negative': sale.mount < 0}">
+                <td>{{ sale.description }}</td>
+                <td>{{ sale.mount }}</td>
+                <td>{{ sale.ingress }}</td>
+                <td>{{ sale.change }}</td>
+                <td>{{ sale.saleTime | date:'medium' }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </p-scrollPanel>
+      <p class="sale-totals">
+        <b class="sale-total">Venta:</b> {{ saleTotal }}
+        <b class="sale-total">Gastos:</b> {{ spentTotal }}
+        <b class="sale-total">Total:</b>
+        <a [ngClass]="{'sale-negative': total < 0}">{{ total }}</a>
+      </p>
+    </div>
+  </ng-template>
+</p-splitter>
+
+

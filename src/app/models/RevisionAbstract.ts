@@ -11,4 +11,7 @@ export abstract class RevisionAbstract {
   public fiveHundreds!: number;
 
   public total?: number;
+  public totalSale?: number;
+  public totalSpent?: number;
+  public result?: number;
 }

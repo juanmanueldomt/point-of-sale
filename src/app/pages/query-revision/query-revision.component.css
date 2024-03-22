@@ -1,0 +1,66 @@
+.p-inputgroup p-dropdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+revision-sales {
+  max-height: 100%;
+  overflow: auto;
+}
+.input-revision{
+  margin-top: 2em;
+  width: 30em;
+  margin-left: 10em;
+}
+
+.left-revision{
+  display: block;
+  width: 100%;
+}
+
+.from-revision-col {
+  float: left;
+  width: 50%;
+}
+
+.from-revision-row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.from-revision{
+  margin-top: 1em;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.to-revision{
+  margin-top: 0.5rem;
+}
+.sale-totals{
+  margin-top: 1em;
+}
+.crop{
+  height: 20px;
+  width: 30px;
+  overflow: hidden;
+}
+.crop img {
+  margin: -4px 0 0 0px;
+}
+
+.submit-revision{
+  margin-left: 9rem
+}
+
+.p-splitter-panel-nested{
+  display: block;
+}
+
+.sale-totals {
+  font-size: 1.4rem;
+}
+
+.sale-negative{
+  color: red;
+}

@@ -34,7 +34,12 @@ export class AppComponent implements OnInit{
             label: "Consulta",
             icon: "pi pi-search",
             routerLink: "/query"
-          }
+          },
+          {
+            label: "Ver cortes",
+            icon: "pi pi-book",
+            routerLink: "/query-revision"
+          },
         ]
       }
     ];

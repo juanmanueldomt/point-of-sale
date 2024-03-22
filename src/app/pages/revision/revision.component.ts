@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Sale} from "../../models/Sale";
 import {CardModule} from "primeng/card";
-import {SharedModule} from "primeng/api";
+import {MessageService, SharedModule} from "primeng/api";
 import {TableModule} from "primeng/table";
 import {DropdownModule} from "primeng/dropdown";
 import {RevisionTotal} from "../../models/RevisionTotal";
@@ -21,6 +21,7 @@ import {InputNumberModule} from "primeng/inputnumber";
 import {RippleModule} from "primeng/ripple";
 import {BadgeModule} from "primeng/badge";
 import lodash from "lodash";
+import {ToastModule} from "primeng/toast";
 
 @Component({
   selector: 'app-revision',
@@ -45,8 +46,9 @@ import lodash from "lodash";
     RippleModule,
     BadgeModule,
     NgClass,
+    ToastModule,
   ],
-  providers: [RevisionService, SaleService],
+  providers: [RevisionService, SaleService, MessageService],
   templateUrl: './revision.component.html',
   styleUrl: './revision.component.css'
 })
@@ -77,8 +79,11 @@ export class RevisionComponent implements OnInit {
   constructor(
     private revisionService: RevisionService,
     private saleService: SaleService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private messageService: MessageService
   ) {
+    this.revision.total = 0
+    this.revision.isSetMoney = false
   }
 
   public ngOnInit(): void {
@@ -124,7 +129,19 @@ export class RevisionComponent implements OnInit {
 
   public doRevision(): void {
     if (this.revisionForm.valid) {
-      console.log("Error", this.total)
+      const revision = this.getRevisionModel()
+      this.revisionService.create(revision).subscribe({
+        next: revision => {
+          this.loadRevisions()
+          this.revisionForm.reset()
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Revision completada',
+            detail: 'La revision se ha realizado correctamente'
+          });
+        },
+        error: (error) => console.log(error)
+      })
     }
   }
 
@@ -139,5 +156,26 @@ export class RevisionComponent implements OnInit {
         _.toNumber(this.revisionForm.get("twoHundreds")?.value) +
         _.toNumber(this.revisionForm.get("fiveHundreds")?.value)
     }
+  }
+
+  private getRevisionModel() {
+    const revision = new RevisionTotal();
+
+    revision.singleCoins = _.toNumber(this.revisionForm.get("singleCoins")?.value)
+    revision.tenCoins = _.toNumber(this.revisionForm.get("tenCoins")?.value)
+    revision.twenties = _.toNumber(this.revisionForm.get("twenties")?.value)
+    revision.fifties = _.toNumber(this.revisionForm.get("fifties")?.value)
+    revision.hundreds = _.toNumber(this.revisionForm.get("hundreds")?.value)
+    revision.twoHundreds = _.toNumber(this.revisionForm.get("twoHundreds")?.value)
+    revision.fiveHundreds = _.toNumber(this.revisionForm.get("fiveHundreds")?.value)
+    revision.isSetMoney = false
+
+    revision.total = this.revision.total
+    revision.totalSpent = this.spentTotal
+    revision.totalSale = this.saleTotal
+    revision.result = _.toNumber(this.revision.total) - (
+      _.toNumber(this.selectedRevision.total) +
+      _.toNumber(this.total))
+    return revision;
   }
 }
