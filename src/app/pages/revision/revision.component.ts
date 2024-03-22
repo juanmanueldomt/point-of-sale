@@ -20,6 +20,7 @@ import {ButtonModule} from "primeng/button";
 import {InputNumberModule} from "primeng/inputnumber";
 import {RippleModule} from "primeng/ripple";
 import {BadgeModule} from "primeng/badge";
+import lodash from "lodash";
 
 @Component({
   selector: 'app-revision',
@@ -51,7 +52,6 @@ import {BadgeModule} from "primeng/badge";
 })
 export class RevisionComponent implements OnInit {
 
-  public revisions: RevisionTotal[] = [];
   public sales: Sale[] = [];
 
   public selectedRevision: RevisionTotal = new RevisionTotal();
@@ -82,7 +82,6 @@ export class RevisionComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.revision.total = 0
     this.loadRevisions()
     this.revisionForm.valueChanges.subscribe(() => {
       this.updateTotals();
@@ -90,13 +89,10 @@ export class RevisionComponent implements OnInit {
   }
 
   private loadRevisions(): void {
-    this.revisionService.getRevisions().subscribe({
-      next: revisions => {
-        this.revisions = revisions
-        if (!_.isEmpty(this.revisions)) {
-          this.selectedRevision = this.revisions[0]
-          this.selectRevision()
-        }
+    this.revisionService.getLastRevision().subscribe({
+      next: revision => {
+        this.selectedRevision = revision
+        this.selectRevision()
       },
       error: err => console.log(err)
     })
@@ -127,7 +123,9 @@ export class RevisionComponent implements OnInit {
   }
 
   public doRevision(): void {
-
+    if (this.revisionForm.valid) {
+      console.log("Error", this.total)
+    }
   }
 
   public updateTotals(): void {

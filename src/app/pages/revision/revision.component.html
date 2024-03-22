@@ -3,20 +3,7 @@
     <div class="left-revision">
       <h2>Corte de caja</h2>
       <div class="input-revision">
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon"><i class="pi pi-inbox"></i></span>
-          <p-dropdown [options]="revisions" [(ngModel)]="selectedRevision" optionLabel="revisionTime"
-                      [showClear]="true" placeholder="Seleccione un corte de Caja" (onChange)="selectRevision()">
-            <ng-template pTemplate="selectedItem">
-              <div>{{ selectedRevision.revisionTime | date: 'medium' }}</div>
-            </ng-template>
-            <ng-template let-revision pTemplate="item">
-              <div class="flex align-items-center gap-2">
-                <div>{{ revision.revisionTime | date: 'medium' }}</div>
-              </div>
-            </ng-template>
-          </p-dropdown>
-        </div>
+        <h3 *ngIf="this.selectedRevision"> Desde: {{ this.selectedRevision.revisionTime | date: 'medium' }}</h3>
       </div>
       <div class="from-revision" mb-5>
         <p-fieldset legend="Informacion del corte">
@@ -79,11 +66,16 @@
                   <input pInputText id="fifties-input" placeholder="50's" formControlName="fifties"/>
                 </p-inputGroup>
 
-                <h1 *ngIf="total && this.revision && this.selectedRevision" [ngClass]="{'sale-negative': total < 0}">
-                  Resultado: {{
+                <h1 *ngIf="total && this.revision && this.selectedRevision"
+                    [ngClass]="{'sale-negative': (
+                    lodash.toNumber(this.revision.total) - (
                     lodash.toNumber(this.selectedRevision.total) +
-                    lodash.toNumber(this.revision.total) +
-                    lodash.toNumber(this.total)
+                    lodash.toNumber(this.total) )
+                    ) < 0}">
+                  Resultado: {{
+                    lodash.toNumber(this.revision.total) - (
+                      lodash.toNumber(this.selectedRevision.total) +
+                      lodash.toNumber(this.total))
                   }}
                 </h1>
               </div>

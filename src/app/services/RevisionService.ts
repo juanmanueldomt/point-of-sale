@@ -14,4 +14,8 @@ export class RevisionService {
   public getRevisions(): Observable<RevisionTotal[]> {
     return this.http.get(`${environment.serverUrl}/revision/`) as Observable<RevisionTotal[]>
   }
+
+  public getLastRevision(): Observable<RevisionTotal> {
+    return this.http.get(`${environment.serverUrl}/revision/last`) as Observable<RevisionTotal>
+  }
 }
