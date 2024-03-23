@@ -1,7 +1,29 @@
+<p-toast></p-toast>
 <p-menubar [model]="items">
   <ng-template pTemplate="start">
-    <img src="/assets/favicon.svg" height="40" class="mr-2" />
+    <img src="/assets/favicon.svg" height="40" class="mr-2"/>
+  </ng-template>
+  <ng-template pTemplate="end">
+    <ng-container *ngIf="!isLogged">
+      <button (click)="showDialog()" type="button" pButton label="Iniciar" icon="pi pi-user"></button>
+    </ng-container>
+    <ng-container *ngIf="isLogged">
+      <button (click)="logout()" type="button" pButton label="Salir" icon="pi pi-sign-out"></button>
+    </ng-container>
   </ng-template>
 </p-menubar>
 
-<router-outlet />
+<p-dialog header="Acceder" [(visible)]="showLogin" [modal]="true" [style]="{width: '20vw'}">
+    <div class="login-form">
+      <div class="user-input login-input">
+        <label class="login-label">Username</label>
+        <input [(ngModel)]="user" pInputText id="username" type="text" class="w-12rem"/>
+      </div>
+      <div class="pass-input login-input">
+        <label class="login-label">Password</label>
+        <input [(ngModel)]="pass" pInputText id="password" type="password" class="w-12rem"/>
+      </div>
+      <p-button label="Login" icon="pi pi-user" styleClass="login-button" (onClick)="login()"></p-button>
+    </div>
+</p-dialog>
+<router-outlet/>

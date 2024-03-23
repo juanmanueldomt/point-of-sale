@@ -20,7 +20,6 @@ import {ButtonModule} from "primeng/button";
 import {InputNumberModule} from "primeng/inputnumber";
 import {RippleModule} from "primeng/ripple";
 import {BadgeModule} from "primeng/badge";
-import lodash from "lodash";
 import {ToastModule} from "primeng/toast";
 
 @Component({
