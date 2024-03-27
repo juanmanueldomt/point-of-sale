@@ -29,7 +29,7 @@
             ],
             "scripts": [],
             "server": "src/main.server.ts",
-            "prerender": true,
+            "prerender": false,
             "ssr": {
               "entry": "server.ts"
             }
@@ -40,7 +40,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "3mb"
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -99,6 +99,5 @@
   },
   "cli": {
     "analytics": "1ef2b2d6-700f-47fd-9fe8-8d9df05fa94f"
-  },
-
+  }
 }
