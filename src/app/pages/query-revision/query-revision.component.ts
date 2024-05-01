@@ -15,10 +15,10 @@ import {TableModule} from "primeng/table";
 import {ToastModule} from "primeng/toast";
 import {Sale} from "../../models/Sale";
 import {RevisionTotal} from "../../models/RevisionTotal";
-import _ from "lodash";
 import {RevisionService} from "../../services/RevisionService";
 import {SaleService} from "../../services/SaleService";
 import {DropdownModule} from "primeng/dropdown";
+import _ from "lodash";
 
 @Component({
   selector: 'app-query-revision',
@@ -62,8 +62,8 @@ export class QueryRevisionComponent {
   public total: number = 0;
   public result: number = 0;
 
-
   public lodash = _
+
   constructor(
     private revisionService: RevisionService,
     private saleService: SaleService,
@@ -92,16 +92,12 @@ export class QueryRevisionComponent {
       this.saleService.getSalesFromRevision(this.selectedRevision.id).subscribe({
         next: sales => {
           this.sales = sales
-          this.total = 0
-          this.saleTotal = 0
-          this.spentTotal = 0
-          this.sales.forEach(sale => {
-            if (sale.mount >= 0) {
-              this.saleTotal += sale.mount
-            } else {
-              this.spentTotal += sale.mount
-            }
-            this.total = this.saleTotal + this.spentTotal
+          this.revisionService.getNextRevision(this.selectedRevision.id).subscribe({
+            next: (revision: RevisionTotal) => {
+              this.toRevision = revision
+              this.calculateTotals()
+            },
+            error: (err) => console.log(err)
           })
         },
         error: err => console.log(err)
@@ -111,4 +107,21 @@ export class QueryRevisionComponent {
     }
   }
 
+  private calculateTotals(): void {
+    this.total = 0
+    this.saleTotal = 0
+    this.spentTotal = 0
+    this.sales.forEach(sale => {
+      if (sale.mount >= 0) {
+        this.saleTotal += sale.mount
+      } else {
+        this.spentTotal += sale.mount
+      }
+      this.total = this.saleTotal + this.spentTotal
+    })
+    // @ts-ignore
+    this.result = this.toRevision?.total - (this.total + this.selectedRevision?.total)
+
+
+  }
 }

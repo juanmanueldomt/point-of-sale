@@ -16,6 +16,7 @@
           <th>Monto</th>
           <th>Monto recibido</th>
           <th>Cambio</th>
+          <th>Fecha</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-sale>
@@ -24,6 +25,7 @@
           <td>{{ sale.mount }}</td>
           <td>{{ sale.ingress }}</td>
           <td>{{ sale.change }}</td>
+          <td>{{ sale.saleTime | date:'medium'}}</td>
         </tr>
       </ng-template>
     </p-table>

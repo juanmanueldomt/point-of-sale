@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {InputTextModule} from "primeng/inputtext";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {CardModule} from "primeng/card";
-import {NgIf} from "@angular/common";
+import {DatePipe, NgIf} from "@angular/common";
 import {SharedModule} from "primeng/api";
 import {TableModule} from "primeng/table";
 import {Sale} from "../../models/Sale";
@@ -28,7 +28,8 @@ import {SaleService} from "../../services/SaleService";
     InputGroupModule,
     InputNumberModule,
     ReactiveFormsModule,
-    RippleModule
+    RippleModule,
+    DatePipe
   ],
   providers: [SaleService],
   templateUrl: './query.component.html',

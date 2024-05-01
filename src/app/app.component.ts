@@ -53,6 +53,8 @@ export class AppComponent implements OnInit{
         this.tokenUser.loggedId = true
         this.isLogged = true
         this.showLogin = false
+        this.user = ''
+        this.pass = ''
         this.initializeMenu()
       },
       error: err => {

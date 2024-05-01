@@ -18,7 +18,7 @@
           </p-dropdown>
         </div>
       </div>
-      <div class="from-revision" mb-5>
+      <div class="from-revision" mb-5 *ngIf="selectedRevision">
         <p-fieldset legend="Informacion del corte">
           <div class="from-revision-row">
             <div class="from-revision-col">
@@ -37,7 +37,7 @@
         </p-fieldset>
       </div>
 
-      <div class="to-revision" mb-5>
+      <div class="to-revision" mb-5 *ngIf="toRevision">
         <p-fieldset legend="Realizar corte">
           <div class="from-revision-row">
             <div class="from-revision-col">

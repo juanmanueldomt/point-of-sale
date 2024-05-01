@@ -22,4 +22,8 @@ export class RevisionService {
   public create(revision: RevisionTotal): Observable<RevisionTotal> {
     return this.http.post(`${environment.serverUrl}/revision`, revision) as Observable<RevisionTotal>
   }
+
+  public getNextRevision(originalRevision : number): Observable<RevisionTotal> {
+    return this.http.get(`${environment.serverUrl}/revision/next`, {params: { revisionId: originalRevision}}) as Observable<RevisionTotal>
+  }
 }
