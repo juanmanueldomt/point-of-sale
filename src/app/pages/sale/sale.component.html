@@ -57,7 +57,7 @@
       <p-inputGroupAddon>
         <i class="pi pi-dollar"></i>
       </p-inputGroupAddon>
-      <p-inputNumber #changeInput placeholder="Monto" formControlName="ingress"/>
+      <p-inputNumber #changeInput id="ingress-input" placeholder="Monto" formControlName="ingress"/>
     </p-inputGroup>
     <h2>
       Cambio: {{ lodash.toNumber(confirmForm.get('ingress')?.value) - lodash.toNumber(saleForm.get('mount')?.value) }}</h2>

@@ -20,6 +20,10 @@ import {interval, takeWhile} from "rxjs";
 
 const REFRESH_INTERVAL = 60000;
 
+const WAIT_FOR_FOCUS = 50;
+
+const FIRST_ELEMENT = 0;
+
 @Component({
   selector: 'app-sale',
   standalone: true,
@@ -51,7 +55,6 @@ export class SaleComponent implements OnInit, OnDestroy {
   public lastSales: Sale[] = [];
   public showConfirmation: boolean = false;
   private stop: boolean = false;
-
 
   saleForm = this.formBuilder.group({
     description: ['', Validators.required],
@@ -96,6 +99,13 @@ export class SaleComponent implements OnInit, OnDestroy {
   public submit(): void {
     if (this.saleForm.valid) {
       this.showConfirmation = true;
+      setTimeout(() => {
+        const input: HTMLElement | null = document.getElementById("ingress-input");
+        if (input != null && input.children[FIRST_ELEMENT] != null) {
+          (input.children[FIRST_ELEMENT].children[FIRST_ELEMENT] as HTMLElement).focus();
+        }
+      }, WAIT_FOR_FOCUS)
+
     }
   }
 
